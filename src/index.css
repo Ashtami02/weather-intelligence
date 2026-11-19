@@ -1,0 +1,158 @@
+@import "tailwindcss";
+
+:root {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  color: #182e48;
+  background: #f2f6fb;
+  color-scheme: light;
+  font-synthesis: none;
+  --muted: #526780;
+  --accent: #205c9f;
+  --border: #dce6f1;
+}
+
+body { min-width: 280px; margin: 0; }
+button { cursor: pointer; }
+button:disabled { cursor: wait; opacity: .65; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+section, aside { scroll-margin-top: 1rem; }
+
+.shell { width: min(100% - 3rem, 82rem); margin-inline: auto; }
+.topbar { background: #fff; border-bottom: 1px solid var(--border); }
+.brand { font-weight: 700; font-size: 1.06rem; letter-spacing: -.02em; }
+.brand-icon, .section-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  background: #e9f2fc;
+  color: var(--accent);
+  border-radius: .65rem;
+  width: 2.2rem;
+  height: 2.2rem;
+}
+.brand-icon { border: 1px solid #d7e6f6; height: 2.5rem; width: 2.5rem; }
+nav a { font-size: .9rem; color: #405b77; }
+nav a:hover, .text-button:hover { color: #174677; text-decoration: underline; }
+
+.dashboard { padding-block: clamp(1.65rem, 4vw, 2.75rem) 1.5rem; }
+.dashboard-heading h1 { font-size: clamp(1.85rem, 4vw, 2.55rem); font-weight: 720; line-height: 1.1; letter-spacing: -.045em; }
+.dashboard-heading p { color: var(--muted); margin-top: .75rem; }
+.dashboard-search { position: relative; z-index: 2; max-width: 46rem; margin-block: 1.35rem 1.6rem; }
+.search-area { position: relative; }
+.search-form {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  border: 1px solid #cad8e8;
+  border-radius: .85rem;
+  background: #fff;
+  color: var(--accent);
+  padding: .4rem .4rem .4rem .95rem;
+}
+.search-form:focus-within { border-color: var(--accent); }
+.search-form > svg { flex-shrink: 0; }
+.search-form input { width: 100%; min-width: 0; outline: none; color: #182e48; }
+.search-form input::placeholder { color: #657992; }
+.primary-button { background: var(--accent); color: #fff; font-weight: 700; border-radius: .56rem; padding: .62rem 1.05rem; }
+.primary-button:hover:not(:disabled) { background: #184b86; }
+.search-message { color: var(--muted); margin-top: .65rem; }
+.matches {
+  position: absolute;
+  inset: calc(100% + .45rem) 0 auto;
+  background: #fff;
+  border: 1px solid #cad8e8;
+  border-radius: .85rem;
+  padding: .35rem;
+  box-shadow: 0 12px 28px #18395822;
+}
+.matches button { display: flex; align-items: center; gap: .75rem; padding: .65rem; width: 100%; text-align: left; border-radius: .5rem; }
+.matches button:hover { background: #edf5ff; }
+.matches svg, .place-label svg { color: var(--accent); flex-shrink: 0; }
+.matches small { display: block; color: var(--muted); font-size: .875rem; }
+
+.dashboard-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(17rem, 22rem); gap: 1rem; align-items: start; }
+.weather-column { display: grid; min-width: 0; gap: 1rem; }
+.sidebar { display: grid; min-width: 0; gap: 1rem; }
+.panel { min-width: 0; border: 1px solid var(--border); background: #fff; border-radius: 1rem; padding: clamp(1rem, 2vw, 1.4rem); box-shadow: 0 4px 14px #1839580a; }
+.current-panel { background: #eaf4ff; border-color: #d2e3f6; }
+.panel-heading { display: flex; align-items: center; gap: .65rem; }
+.panel-heading h2 { font-size: 1.1rem; font-weight: 650; letter-spacing: -.02em; }
+.place-label { display: flex; align-items: center; gap: .42rem; margin-top: 1.25rem; color: #325579; overflow-wrap: anywhere; }
+.current-reading { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-block: .65rem 1.4rem; }
+.temperature { font-size: clamp(2.6rem, 7vw, 4.4rem); font-weight: 690; letter-spacing: -.075em; line-height: 1.06; }
+.condition { font-size: 1.1rem; color: #405b77; margin-top: .25rem; }
+.current-icon { color: #a95e22; margin-right: clamp(0rem, 4vw, 3rem); flex-shrink: 0; width: clamp(3.25rem, 11vw, 5.5rem); }
+.metrics-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .6rem; }
+.metric { padding: .75rem; border: 1px solid #d2e3f6; border-radius: .7rem; background: #f7fbff; }
+.metric dt { display: flex; align-items: center; gap: .35rem; color: #47637f; font-size: .875rem; }
+.metric dt svg { flex-shrink: 0; color: var(--accent); }
+.metric dd { font-weight: 650; margin-top: .35rem; }
+.weather-empty { display: grid; justify-items: center; place-content: center; gap: .85rem; min-height: 10rem; text-align: center; color: var(--muted); }
+.weather-empty svg { color: #356da7; }
+.muted, .history-empty { color: var(--muted); }
+.error-text { color: #a13232; }
+.panel-message { margin-top: 1rem; }
+
+.forecast-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .52rem; margin-top: 1rem; }
+.forecast-day { display: grid; gap: .55rem; justify-items: start; padding: .7rem; border: 1px solid var(--border); border-radius: .7rem; background: #f8fbff; }
+.forecast-day time { display: flex; flex-wrap: wrap; align-items: baseline; gap: .15rem .4rem; }
+.forecast-day time span { color: var(--muted); font-size: .875rem; }
+.forecast-day > svg { color: #356da7; }
+.forecast-condition { font-size: .875rem; line-height: 1.25; min-height: 2.1rem; overflow-wrap: anywhere; }
+.forecast-temps { display: flex; gap: .42rem; font-weight: 650; }
+.forecast-temps span + span { color: var(--muted); font-weight: 450; }
+.rain-reading, .sun-times span { display: flex; align-items: center; gap: .24rem; font-size: .875rem; color: #405b77; }
+.rain-reading svg, .sun-times svg { color: var(--accent); flex-shrink: 0; }
+.sun-times { display: flex; flex-wrap: wrap; gap: .25rem .5rem; }
+.sun-times svg { color: #aa6127; }
+
+.charts-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.chart { height: 14rem; margin-top: .75rem; min-width: 0; overflow: clip; }
+.chart-panel .recharts-tooltip-label { color: #182e48; }
+
+.history-empty { padding: .95rem 0 0; }
+.history-empty svg { color: var(--accent); }
+.history-message, .history-list { margin-top: 1rem; }
+.history-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: .45rem; padding-block: .65rem; }
+.history-row + .history-row { border-top: 1px solid var(--border); }
+.history-location { display: grid; text-align: left; gap: .15rem; min-width: 0; overflow-wrap: anywhere; }
+.history-location:hover:not(:disabled) strong, .text-button { color: var(--accent); }
+.history-location span, .history-location time { color: var(--muted); font-size: .875rem; }
+.history-temp { color: #325579; font-size: .875rem; white-space: nowrap; }
+.icon-button { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; color: var(--muted); border-radius: .5rem; }
+.icon-button:hover:not(:disabled) { color: #a13232; background: #fff0ec; }
+.text-button { margin-top: .35rem; text-decoration: underline; }
+.footer { display: flex; align-items: center; gap: .45rem; color: var(--muted); font-size: .875rem; padding-top: 1.35rem; }
+
+.city-map { height: clamp(13rem, 32vw, 17rem); margin-top: 1rem; border: 1px solid var(--border); border-radius: .7rem; background: #eef4fb; isolation: isolate; }
+.map-caption { margin-top: .5rem; font-size: .875rem; }
+.map-caption:not(.error-text) { color: var(--muted); }
+.comparison-panel { margin-top: 1rem; }
+.comparison-searches { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1rem; }
+.comparison-search { min-width: 0; }
+.comparison-label { margin-bottom: .35rem; font-size: .9rem; font-weight: 650; }
+.comparison-table { width: 100%; table-layout: fixed; margin-top: 1rem; text-align: left; }
+.comparison-table th, .comparison-table td { padding: .6rem .45rem; border-bottom: 1px solid var(--border); overflow-wrap: anywhere; }
+.comparison-table thead { background: #f0f6fd; }
+.comparison-table tbody th { color: var(--muted); font-weight: 550; }
+.comparison-difference { width: fit-content; margin-top: .95rem; padding: .45rem .75rem; border-radius: .55rem; background: #fff2e3; color: #79471c; }
+.comparison-difference strong { margin-left: .32rem; }
+
+@media (max-width: 62rem) {
+  .dashboard-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 42rem) {
+  .shell { width: calc(100% - 2rem); }
+  .metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .forecast-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .charts-grid { grid-template-columns: minmax(0, 1fr); }
+  .comparison-searches { grid-template-columns: minmax(0, 1fr); }
+  .comparison-table { font-size: .875rem; }
+}
+
+@media (max-width: 25rem) {
+  .forecast-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .metric { padding: .55rem; }
+  .metric dt { flex-wrap: wrap; }
+}
