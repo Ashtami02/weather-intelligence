@@ -11,7 +11,7 @@ if not DATABASE_URL:
 if DATABASE_URL.startswith(("postgres://", "postgresql://")):
     DATABASE_URL = "postgresql+psycopg://" + DATABASE_URL.split("://", 1)[1]
 
-engine = create_engine(DATABASE_URL)
+engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 SessionLocal = sessionmaker(bind=engine)
 
 class Base(DeclarativeBase):

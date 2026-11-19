@@ -20,6 +20,8 @@ export default function App() {
   const [historyError, setHistoryError] = useState('')
   const [historyVersion, setHistoryVersion] = useState(0)
   const [deleting, setDeleting] = useState<number | null>(null)
+  const [downloading, setDownloading] = useState('')
+  const [downloadError, setDownloadError] = useState('')
 
   useEffect(() => {
     const controller = new AbortController()
@@ -121,6 +123,28 @@ export default function App() {
     }
   }
 
+  async function downloadHistory(format: 'csv' | 'json') {
+    setDownloading(format)
+    setDownloadError('')
+    try {
+      const response = await fetch(`${api}/api/history/export/${format}`)
+      const mediaType = format === 'csv' ? 'text/csv' : 'application/json'
+      if (!response.ok || !response.headers.get('content-type')?.startsWith(mediaType)) throw new Error()
+      const url = URL.createObjectURL(await response.blob())
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `weather-searches.${format}`
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000)
+    } catch {
+      setDownloadError('Could not download search history. Try again.')
+    } finally {
+      setDownloading('')
+    }
+  }
+
   return (
     <>
       <header className="topbar">
@@ -134,6 +158,7 @@ export default function App() {
             <a href="#forecast">Forecast</a>
             <a href="#compare">Compare</a>
             <a href="#history">History</a>
+            <a href="#about">About</a>
           </nav>
         </div>
       </header>
@@ -168,6 +193,15 @@ export default function App() {
                 <span className="section-icon"><HistoryIcon size={19} /></span>
                 <h2 id="history-title">Recent searches</h2>
               </div>
+              <div className="history-downloads">
+                <button disabled={Boolean(downloading)} onClick={() => void downloadHistory('csv')}>
+                  {downloading === 'csv' ? 'Downloading…' : 'Download CSV'}
+                </button>
+                <button disabled={Boolean(downloading)} onClick={() => void downloadHistory('json')}>
+                  {downloading === 'json' ? 'Downloading…' : 'Download JSON'}
+                </button>
+              </div>
+              {downloadError && <p className="error-text history-message" role="status">{downloadError}</p>}
               {historyLoading && <p className="muted history-message" role="status">Loading history…</p>}
               {historyError && (
                 <div className="history-message" role="status">
@@ -215,7 +249,17 @@ export default function App() {
           </div>
         </div>
         <CityComparison />
-        <footer className="footer"><Droplet size={15} /> Weather data from Open-Meteo</footer>
+        <section className="panel about-panel" id="about" aria-labelledby="about-title">
+          <div className="panel-heading"><h2 id="about-title">About PM Accelerator</h2></div>
+          <p className="muted">
+            Product Manager Accelerator supports aspiring and experienced product management professionals in developing their product management and leadership skills. Its programs and community help people at different stages of their careers, from students pursuing entry-level opportunities to experienced professionals.
+          </p>
+          <a className="text-button" href="https://www.linkedin.com/school/pmaccelerator/">PM Accelerator on LinkedIn</a>
+        </section>
+        <footer className="footer">
+          <span>Built by Ashtami Choudhary</span>
+          <span className="flex items-center gap-1.5"><Droplet size={15} /> Weather data from Open-Meteo</span>
+        </footer>
       </main>
     </>
   )

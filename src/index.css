@@ -122,7 +122,12 @@ nav a:hover, .text-button:hover { color: #174677; text-decoration: underline; }
 .icon-button { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; color: var(--muted); border-radius: .5rem; }
 .icon-button:hover:not(:disabled) { color: #a13232; background: #fff0ec; }
 .text-button { margin-top: .35rem; text-decoration: underline; }
-.footer { display: flex; align-items: center; gap: .45rem; color: var(--muted); font-size: .875rem; padding-top: 1.35rem; }
+.footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .65rem; color: var(--muted); font-size: .875rem; padding-top: 1.35rem; }
+.history-downloads { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .9rem; }
+.history-downloads button { padding: .4rem .62rem; border: 1px solid var(--border); border-radius: .5rem; color: var(--accent); font-size: .875rem; font-weight: 650; }
+.history-downloads button:hover:not(:disabled) { background: #edf5ff; }
+.about-panel { margin-top: 1rem; }
+.about-panel p { max-width: 76ch; margin-block: .55rem; }
 
 .city-map { height: clamp(13rem, 32vw, 17rem); margin-top: 1rem; border: 1px solid var(--border); border-radius: .7rem; background: #eef4fb; isolation: isolate; }
 .map-caption { margin-top: .5rem; font-size: .875rem; }

@@ -1,6 +1,9 @@
+import csv
 import os
+from io import StringIO
 from fastapi import FastAPI,HTTPException,Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 from app.services.weather import cityweather, current_weather, forecast
 from app.database import Base,engine,SessionLocal
 from app.models import WeatherSearch
@@ -8,10 +11,11 @@ from app.schemas import WeatherSearchCreate, WeatherSearchResponse
 from sqlalchemy import select
  
 app = FastAPI()
-origins = os.getenv(
-    "CORS_ORIGINS",
-    "http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173,http://127.0.0.1:4173"
+default_origins = (
+    "http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173,http://127.0.0.1:4173,"
+    "https://weather-intelligence-omega.vercel.app"
 )
+origins = os.getenv("CORS_ORIGINS") or default_origins
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[origin.strip().rstrip("/") for origin in origins.split(",") if origin.strip()],
@@ -53,6 +57,28 @@ def get_history():
     with SessionLocal() as db:
         records = db.scalars(select(WeatherSearch).order_by(WeatherSearch.id)).all()
         return records
+
+
+@app.get("/api/history/export/csv")
+def export_history_csv():
+    output = StringIO(newline="")
+    fields = ["id", "city", "country", "latitude", "longitude", "temperature", "searched_at"]
+    writer = csv.DictWriter(output, fieldnames=fields)
+    writer.writeheader()
+    for record in get_history():
+        weather = WeatherSearchResponse.model_validate(record).model_dump(mode="json")
+        writer.writerow(weather)
+    return Response(
+        content=output.getvalue(),
+        media_type="text/csv",
+        headers={"Content-Disposition": 'attachment; filename="weather-searches.csv"'}
+    )
+
+
+@app.get("/api/history/export/json", response_model=list[WeatherSearchResponse])
+def export_history_json(response: Response):
+    response.headers["Content-Disposition"] = 'attachment; filename="weather-searches.json"'
+    return get_history()
 
 
 @app.get("/api/history/{id}", response_model=WeatherSearchResponse)

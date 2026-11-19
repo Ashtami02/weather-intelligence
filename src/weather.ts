@@ -37,7 +37,8 @@ export type History = {
   searched_at: string
 }
 
-export const api = (import.meta.env.VITE_API_URL?.trim() || (import.meta.env.DEV ? 'http://127.0.0.1:8000' : '')).replace(/\/+$/, '')
+const apiUrl = import.meta.env.VITE_API_URL?.trim() || (import.meta.env.DEV ? 'http://127.0.0.1:8000' : '')
+export const api = apiUrl.replace(/\/+$/, '').replace(/\/api$/, '')
 
 export function placeName(place: Location) {
   return [place.name, place.state, place.country].filter(Boolean).join(', ')
